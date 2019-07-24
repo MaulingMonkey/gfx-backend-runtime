@@ -1,0 +1,46 @@
+cache:
+  - C:\projects\gfx-backend-runtime\target\ -> appveyor.yml
+
+os: Visual Studio 2017
+
+environment:
+  matrix:
+    # MSVC, only bother to verify stable, TravisCI gets the rest
+    - channel: 1.36.0
+      target: x86_64-pc-windows-msvc
+    - channel: 1.36.0
+      target: i686-pc-windows-msvc
+    # GNU is not supported by shaderc-rs :(
+
+branches:
+  only:
+    - staging
+    - trying
+    - master
+
+install:
+  - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
+  - rustup-init -y --default-toolchain %channel% --default-host %target%
+  - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
+  - rustup component add rustfmt
+  - rustup component add clippy
+  # According to https://www.appveyor.com/docs/windows-images-software/ We will
+  # have `cmake` is already installed, we just pick a version of python to place
+  # in the PATH and also get the `ninja` program, which we just move to the same
+  # directory as python since we already added that directory to the path.
+  - set PATH=%PATH%;C:\Python37-x64
+  - rmdir /Q /S C:\Python27 # Cmake is really stupid
+  - appveyor DownloadFile https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-win.zip
+  - 7z e ninja-win.zip
+  - mv ninja.exe C:\Python37-x64
+  - rustc -vV
+  - cargo -vV
+
+# On advice of reptep we skip the "build" script phase
+build: false
+
+test_script:
+  - cargo fmt -- --check
+  - cargo clippy
+  - cargo build
+  - cargo test # this builds all examples as well

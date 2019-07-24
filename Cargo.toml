@@ -1,0 +1,24 @@
+[package]
+name = "gfx-backend-runtime"
+description = "A gfx-hal backend that allows you to easily select a backend at runtime."
+version = "0.0.1"
+authors = ["Lokathor <zefria@gmail.com>"]
+repository = "https://github.com/Lokathor/gfx-backend-runtime"
+readme = "README.md"
+keywords = ["gfx", "gfx-hal"]
+edition = "2018"
+license = "0BSD"
+
+[dependencies]
+gfx-hal = "0.2"
+gfx-backend-gl = "0.2"
+[target.'cfg(any(windows, unix))'.dependencies.gfx-backend-vulkan]
+version = "0.2"
+[target.'cfg(windows)'.dependencies.gfx-backend-dx12]
+version = "0.2"
+[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.gfx-backend-metal]
+version = "0.2"
+
+[badges]
+appveyor = { repository = "Lokathor/gfx-backend-runtime" }
+travis-ci = { repository = "Lokathor/gfx-backend-runtime" }
