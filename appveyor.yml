@@ -42,5 +42,5 @@ build: false
 test_script:
   - cargo fmt -- --check
   - cargo clippy
-  - cargo build --examples
-  - cargo build --examples --features="gfx-backend-dx12"
+  - cargo build
+  - cargo test # this builds all examples as well
