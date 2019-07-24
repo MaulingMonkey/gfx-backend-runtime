@@ -23,5 +23,5 @@ branches:
     - master
 
 script:
-  - travis_wait cargo build
-  - travis_wait cargo test # this builds the examples as well
+  - cargo build
+  - cargo test # this builds the examples as well
