@@ -1,0 +1,27 @@
+# The shaderc dependencies are already installed on the `xenial` base image so
+# we don't need to worry about installing them.
+
+dist: xenial
+
+os:
+  - linux
+  - osx
+  #- windows takes too long with TravisCI, we rely on AppVeyor for this
+
+language: rust
+
+rust:
+  - stable
+
+cache:
+  cargo
+
+branches:
+  only:
+    - staging
+    - trying
+    - master
+
+script:
+  - travis_wait cargo build
+  - travis_wait cargo test # this builds the examples as well
