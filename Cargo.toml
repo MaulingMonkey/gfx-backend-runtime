@@ -13,15 +13,24 @@ license = "0BSD"
 gfx-hal = { version = "0.2", default-features = false }
 gfx-backend-gl = { version = "0.2", default-features = true }
 
-[target.'cfg(any(windows, unix))'.dependencies.gfx-backend-vulkan]
+[target.'cfg(any(windows, all(unix, not(target_os = "ios"))))'.dependencies.gfx-backend-vulkan]
 version = "0.2"
 default-features = false
 [target.'cfg(windows)'.dependencies.gfx-backend-dx12]
 version = "0.2"
-default-features = false
-[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.gfx-backend-metal]
+[target.'cfg(any(target_os = "macos", all(target_arch = "aarch64", target_os = "ios")))'.dependencies.gfx-backend-metal]
 version = "0.2"
 default-features = false
+[target.'cfg(all(target_arch = "x86_64", target_os = "ios"))'.dependencies.gfx-backend-metal]
+version = "0.2"
+default-features = false
+optional = true
+
+[features]
+default = []
+# If your host build machine(s) are OS X 10.15 or higher, you can use gfx-backend-metal in the iOS simulator via this feature.
+# Travis is on OS X 10.13, so this is almost completely untested.
+simulator-metal = ["gfx-backend-metal"]
 
 [badges]
 appveyor = { repository = "Lokathor/gfx-backend-runtime" }
