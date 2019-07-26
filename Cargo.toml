@@ -10,14 +10,18 @@ edition = "2018"
 license = "0BSD"
 
 [dependencies]
-gfx-hal = "0.2"
-gfx-backend-gl = "0.2"
+gfx-hal = { version = "0.2", default-features = false }
+gfx-backend-gl = { version = "0.2", default-features = true }
+
 [target.'cfg(any(windows, unix))'.dependencies.gfx-backend-vulkan]
 version = "0.2"
+default-features = false
 [target.'cfg(windows)'.dependencies.gfx-backend-dx12]
 version = "0.2"
+default-features = false
 [target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies.gfx-backend-metal]
 version = "0.2"
+default-features = false
 
 [badges]
 appveyor = { repository = "Lokathor/gfx-backend-runtime" }
